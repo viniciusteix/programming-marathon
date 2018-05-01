@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
-#define MAX 10010
+
 using namespace std;
+
+#define MAX 10010
 
 int n;
 vector<int> desc[MAX];
