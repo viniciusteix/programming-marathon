@@ -1,9 +1,9 @@
-#include <stdio.h>
 #include <bits/stdc++.h>
-#define MAX 100010
+
 using namespace std;
 
-int n;
+#define MAX 100010
+
 vector<int> rel[MAX];
 int tamanho[MAX];
 int equilibrado[MAX];
@@ -39,10 +39,9 @@ int estaEquilibrado(int a){
 }
 
 int main (){
+	int n, a, b, i;
 	
 	cin >> n;
-	int a, b;
-	int i;
 	
 	for(i = 1; i <= n; i++){
 		cin >> a >> b;
