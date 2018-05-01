@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <iostream>
-#include <queue>
-#define MAX 1010
+#include <bits/stdc++.h>
 
 using namespace std;
+
+#define MAX 1010
+
 vector<int> grafo[MAX];
 int visitado[MAX];
 
@@ -18,7 +18,6 @@ void junta (int i){
 
 
 int main (){
-	
 	int n, m;
 	int i;
 	int a,b;
@@ -39,7 +38,6 @@ int main (){
 	
 	int soma = 0;
 	for(i = 1; i <= n; i++){
-		//cout << "grafo[" << i << "] tm:" << grafo[i].size() <<  endl;
 		if(visitado[i] == 0){
 			soma++;
 			junta(i);
