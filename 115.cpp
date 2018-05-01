@@ -1,9 +1,8 @@
-#include <stdio.h>
-#include <iostream>
-#include <vector>
-#define INF 1000000
+#include <bits/stdc++.h>
 
 using namespace std;
+
+#define INF 1000000
 
 int mosaico[210][210];
 int acessado[210][210];
@@ -32,7 +31,6 @@ int tamanho (int i, int j){
 
 
 int main (){
-	
 	int i,j;
 	int minimo = INF, tam;
 	
@@ -44,8 +42,6 @@ int main (){
 			acessado[i][j] = 0;
 		}
 	}
-	
-	//cout << tamanho(1,1);
 	
 	for(i = 1; i <= h; i++){
 		for(j = 1; j <= l; j++){
