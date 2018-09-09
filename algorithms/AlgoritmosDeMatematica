@@ -1,0 +1,186 @@
+/* Algoritmo que retorna se um número é primo ou nao  */
+
+bool e_primo(int x){
+    if(x == 1)  return 0;
+    for(int i = 2; i*i <= x; ++i){
+	if(x % i == 0){
+        	return 0;
+      	}
+    }
+    return 1;
+}
+
+/* Algoritmo MDC de euclides */
+
+
+int mdc(int a, int b){
+  if(b == 0){
+    return a;
+  }
+  return mdc(b, a%b);
+}
+
+/* Algoritmo do crivo */
+
+
+bool e_composto[1000010];
+
+void crivo(int n){
+  e_composto[1] = 1; // 1 não é composto, mas o vetor na verdade guarda os números que não são primos
+  for(int i = 2; i <= n; ++i){
+    if(!e_composto[i]){
+      for(int j = 2; j*i <= n; ++j){
+        e_composto[i*j] = 1;
+      }
+    }
+  }
+  return;
+}
+
+int main(){
+  int N, Q, a;
+  cin >> N >> Q;
+  crivo(N); // Complexidade O(n*log(log(n)))
+  for(int i = 0; i < Q; ++i){ // Complexidade O(Q)
+    cin >> a;
+    cout << !e_composto[a] << "\n"; //Se composto é falso, então é primo, caso contrário é composto.
+  }
+
+	return 0;
+}
+
+/* Algoritmo  que dado x retorna somente o ultimo  bbit setado */
+
+
+int lsb(int x){
+  return x&-x;
+}
+
+/* count bits  com  lsb  */
+
+
+int count_bits(int x){
+  int ret = 0;
+  while(x != 0){
+    ++ret;
+    x -= x&-x;
+  }
+  return ret;
+}
+
+
+/*  Algoritmo  verifica se o numero é potencia de dois */
+
+bool is_power_of_two(int x){
+  if(x == 0)  return 0;
+  return ((x&(x - 1)) == 0)
+}
+
+
+// GEOMETRIA
+
+//  estrutura base
+
+typedef pair <double, double> point;
+
+point sum(point a, point b){
+  point ret;
+  ret.x = a.x + b.x;
+  ret.y = a.y + b.y;
+  return ret;
+}
+
+point neg(point a){
+  point ret;
+  ret.x = -a.x;
+  ret.y = -a.y;
+  return ret;
+}
+
+// produto  escalar
+
+
+double dot(point a, point b){
+  return a.x*b.x + a.y*b.y;
+}
+
+//   produto vetorial
+
+double cross(point a, point b){
+  return a.x*b.y - a.y*b.x;
+}
+
+//    distancia entre dois pontos
+
+
+double dist(point a, line b){
+  double crs = cross(point(a - b.first), point(b.second - b.first));
+  return abs(crs/dist(b.first, b.second));
+}
+
+
+// area de um polignno consideranndo que os pontos estao ordenados  e sao adjacentes
+
+double area(vector <point> p){
+  double ret = 0;
+  for(int i = 2; i < p.size(); ++i){
+    ret += cross(p[i] - p[0], p[i - 1] - p[0])/2;
+  }
+  return abs(ret);
+}
+
+//  determinanr se um  angulo é connvexo
+
+double ccw(point a, point b, point c){
+  double ret = cross(b - a, c - b);
+  return ret < 0;
+}
+
+
+//  areas
+
+float areaDo_quadrado(float base) {
+     float calculo = base * base;
+     float perimetro = base * 4;
+      return printf("Area do Quadrado = %f \n Perimetro %f", calculo,perimetro);
+ }
+     
+ float areaDo_Retangulo(float base, float altura) {
+     float calculo = base * altura;
+     float perimetro = (base * 2) + (altura * 2);
+      return printf("Area do Retangulo = %f \n Perimetro %f", calculo,perimetro);
+ }
+ 
+ float areaDo_Triangulo(float base, float altura) {
+     float calculo = base * altura / 2;
+     float perimetro = base * 3;
+      return printf("Area do Triangulo Equilatero = %f \n Perimetro %f", calculo,perimetro);
+ }
+ 
+ float areaDo_Trapezio(float base, float altura, float baseMenorDoTrapezio) {
+     float calculo = (base + baseMenorDoTrapezio) * altura / 2;
+     float perimetro = (base + baseMenorDoTrapezio) * altura / 2;
+      return printf("Area do trapezio = %f \n perimetro %f", calculo,perimetro);
+ }
+
+
+//  calcula a area de um polygnno  qualquer
+
+
+double polygonArea(double X[], double Y[], int n)
+{
+    // Initialze area
+    double area = 0.0;
+ 
+    // Calculate value of shoelace formula
+    int j = n - 1;
+    for (int i = 0; i < n; i++)
+    {
+        area += (X[j] + X[i]) * (Y[j] - Y[i]);
+        j = i;  // j is previous vertex to i
+    }
+ 
+    // Return absolute value
+    return abs(area / 2.0);
+}
+
