@@ -1,0 +1,979 @@
+/* Encontra o elemeto que aparece somete uma vezz  */
+
+#include <stdio.h> 
+#define INT_SIZE 32 
+  
+int getSingle(int arr[], int n) 
+{ 
+    // Initialize result 
+    int result = 0; 
+  
+    int x, sum; 
+  
+    // Iterate through every bit 
+    for (int i = 0; i < INT_SIZE; i++) 
+    { 
+      // Find sum of set bits at ith position in all 
+      // array elements 
+      sum = 0; 
+      x = (1 << i); 
+      for (int j=0; j< n; j++ ) 
+      { 
+          if (arr[j] & x) 
+            sum++; 
+      } 
+  
+      // The bits with sum not multiple of 3, are the 
+      // bits of element with single occurrence. 
+      if (sum % 3) 
+        result |= x; 
+    } 
+  
+    return result; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    int arr[] = {12, 1, 12, 3, 12, 1, 1, 2, 3, 2, 2, 3, 7}; 
+    int n = sizeof(arr) / sizeof(arr[0]); 
+    printf("The element with single occurrence is %d ", 
+            getSingle(arr, n)); 
+    return 0; 
+} 
+
+
+/*  Algoritmo que  verifica se houve  extouro no innteiro */
+
+int addOvf(int* result, int a, int b)
+{
+   if( a > INT_MAX - b)
+     return -1;
+   else
+   {
+     *result = a + b;
+      return 0;
+   }
+}
+
+
+
+/* calcula e^x  */
+
+
+// C Efficient program to calculate 
+// e raise to the power x 
+#include <stdio.h> 
+  
+// Returns approximate value of e^x  
+// using sum of first n terms of Taylor Series 
+float exponential(int n, float x) 
+{ 
+    float sum = 1.0f; // initialize sum of series 
+  
+    for (int i = n - 1; i > 0; --i ) 
+        sum = 1 + x * sum / i; 
+  
+    return sum; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    int n = 10; 
+    float x = 1.0f; 
+    printf("e^x = %f", exponential(n, x)); 
+    return 0; 
+}
+
+
+/* fib em  log  n  */
+
+
+
+#include <stdio.h> 
+  
+/* Helper function that multiplies 2 matrices F and M of size 2*2, and 
+  puts the multiplication result back to F[][] */
+void multiply(int F[2][2], int M[2][2]); 
+  
+/* Helper function that calculates F[][] raise to the power n and puts the 
+  result in F[][] 
+  Note that this function is designed only for fib() and won't work as general 
+  power function */
+void power(int F[2][2], int n); 
+  
+int fib(int n) 
+{ 
+  int F[2][2] = {{1,1},{1,0}}; 
+  if (n == 0) 
+      return 0; 
+  power(F, n-1); 
+  
+  return F[0][0]; 
+} 
+  
+void multiply(int F[2][2], int M[2][2]) 
+{ 
+  int x =  F[0][0]*M[0][0] + F[0][1]*M[1][0]; 
+  int y =  F[0][0]*M[0][1] + F[0][1]*M[1][1]; 
+  int z =  F[1][0]*M[0][0] + F[1][1]*M[1][0]; 
+  int w =  F[1][0]*M[0][1] + F[1][1]*M[1][1]; 
+  
+  F[0][0] = x; 
+  F[0][1] = y; 
+  F[1][0] = z; 
+  F[1][1] = w; 
+} 
+  
+void power(int F[2][2], int n) 
+{ 
+  int i; 
+  int M[2][2] = {{1,1},{1,0}}; 
+  
+  // n - 1 times multiply the matrix to {{1,0},{0,1}} 
+  for (i = 2; i <= n; i++) 
+      multiply(F, M); 
+} 
+
+int main(){ 
+  int n = 9; 
+  printf("%d", fib(n)); 
+  getchar(); 
+  return 0; 
+} 
+
+
+/* par mais próximo em nlogn */
+
+#include <iostream> 
+#include <float.h> 
+#include <stdlib.h> 
+#include <math.h> 
+using namespace std; 
+  
+// A structure to represent a Point in 2D plane 
+struct Point 
+{ 
+    int x, y; 
+}; 
+  
+  
+/* Following two functions are needed for library function qsort(). 
+   Refer: http://www.cplusplus.com/reference/clibrary/cstdlib/qsort/ */
+  
+// Needed to sort array of points according to X coordinate 
+int compareX(const void* a, const void* b) 
+{ 
+    Point *p1 = (Point *)a,  *p2 = (Point *)b; 
+    return (p1->x - p2->x); 
+} 
+// Needed to sort array of points according to Y coordinate 
+int compareY(const void* a, const void* b) 
+{ 
+    Point *p1 = (Point *)a,   *p2 = (Point *)b; 
+    return (p1->y - p2->y); 
+} 
+  
+// A utility function to find the distance between two points 
+float dist(Point p1, Point p2) 
+{ 
+    return sqrt( (p1.x - p2.x)*(p1.x - p2.x) + 
+                 (p1.y - p2.y)*(p1.y - p2.y) 
+               ); 
+} 
+  
+// A Brute Force method to return the smallest distance between two points 
+// in P[] of size n 
+float bruteForce(Point P[], int n) 
+{ 
+    float min = FLT_MAX; 
+    for (int i = 0; i < n; ++i) 
+        for (int j = i+1; j < n; ++j) 
+            if (dist(P[i], P[j]) < min) 
+                min = dist(P[i], P[j]); 
+    return min; 
+} 
+  
+// A utility function to find minimum of two float values 
+float min(float x, float y) 
+{ 
+    return (x < y)? x : y; 
+} 
+  
+  
+// A utility function to find the distance beween the closest points of 
+// strip of given size. All points in strip[] are sorted accordint to 
+// y coordinate. They all have an upper bound on minimum distance as d. 
+// Note that this method seems to be a O(n^2) method, but it's a O(n) 
+// method as the inner loop runs at most 6 times 
+float stripClosest(Point strip[], int size, float d) 
+{ 
+    float min = d;  // Initialize the minimum distance as d 
+  
+    // Pick all points one by one and try the next points till the difference 
+    // between y coordinates is smaller than d. 
+    // This is a proven fact that this loop runs at most 6 times 
+    for (int i = 0; i < size; ++i) 
+        for (int j = i+1; j < size && (strip[j].y - strip[i].y) < min; ++j) 
+            if (dist(strip[i],strip[j]) < min) 
+                min = dist(strip[i], strip[j]); 
+  
+    return min; 
+} 
+  
+// A recursive function to find the smallest distance. The array Px contains 
+// all points sorted according to x coordinates and Py contains all points 
+// sorted according to y coordinates 
+float closestUtil(Point Px[], Point Py[], int n) 
+{ 
+    // If there are 2 or 3 points, then use brute force 
+    if (n <= 3) 
+        return bruteForce(Px, n); 
+  
+    // Find the middle point 
+    int mid = n/2; 
+    Point midPoint = Px[mid]; 
+  
+  
+    // Divide points in y sorted array around the vertical line. 
+    // Assumption: All x coordinates are distinct. 
+    Point Pyl[mid+1];   // y sorted points on left of vertical line 
+    Point Pyr[n-mid-1];  // y sorted points on right of vertical line 
+    int li = 0, ri = 0;  // indexes of left and right subarrays 
+    for (int i = 0; i < n; i++) 
+    { 
+      if (Py[i].x <= midPoint.x) 
+         Pyl[li++] = Py[i]; 
+      else
+         Pyr[ri++] = Py[i]; 
+    } 
+  
+    // Consider the vertical line passing through the middle point 
+    // calculate the smallest distance dl on left of middle point and 
+    // dr on right side 
+    float dl = closestUtil(Px, Pyl, mid); 
+    float dr = closestUtil(Px + mid, Pyr, n-mid); 
+  
+    // Find the smaller of two distances 
+    float d = min(dl, dr); 
+  
+    // Build an array strip[] that contains points close (closer than d) 
+    // to the line passing through the middle point 
+    Point strip[n]; 
+    int j = 0; 
+    for (int i = 0; i < n; i++) 
+        if (abs(Py[i].x - midPoint.x) < d) 
+            strip[j] = Py[i], j++; 
+  
+    // Find the closest points in strip.  Return the minimum of d and closest 
+    // distance is strip[] 
+    return min(d, stripClosest(strip, j, d) ); 
+} 
+  
+// The main functin that finds the smallest distance 
+// This method mainly uses closestUtil() 
+float closest(Point P[], int n) 
+{ 
+    Point Px[n]; 
+    Point Py[n]; 
+    for (int i = 0; i < n; i++) 
+    { 
+        Px[i] = P[i]; 
+        Py[i] = P[i]; 
+    } 
+  
+    qsort(Px, n, sizeof(Point), compareX); 
+    qsort(Py, n, sizeof(Point), compareY); 
+  
+    // Use recursive function closestUtil() to find the smallest distance 
+    return closestUtil(Px, Py, n); 
+} 
+  
+// Driver program to test above functions 
+int main() 
+{ 
+    Point P[] = {{2, 3}, {12, 30}, {40, 50}, {5, 1}, {12, 10}, {3, 4}}; 
+    int n = sizeof(P) / sizeof(P[0]); 
+    cout << "The smallest distance is " << closest(P, n); 
+    return 0; 
+}
+
+/*  verifica  se   dois segmetos de   reta  se cruzam   */
+
+
+// A C++ program to check if two given line segments intersect 
+#include <iostream> 
+using namespace std; 
+  
+struct Point 
+{ 
+    int x; 
+    int y; 
+}; 
+  
+// Given three colinear points p, q, r, the function checks if 
+// point q lies on line segment 'pr' 
+bool onSegment(Point p, Point q, Point r) 
+{ 
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && 
+        q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)) 
+       return true; 
+  
+    return false; 
+} 
+  
+// To find orientation of ordered triplet (p, q, r). 
+// The function returns following values 
+// 0 --> p, q and r are colinear 
+// 1 --> Clockwise 
+// 2 --> Counterclockwise 
+int orientation(Point p, Point q, Point r) 
+{ 
+    // See https://www.geeksforgeeks.org/orientation-3-ordered-points/ 
+    // for details of below formula. 
+    int val = (q.y - p.y) * (r.x - q.x) - 
+              (q.x - p.x) * (r.y - q.y); 
+  
+    if (val == 0) return 0;  // colinear 
+  
+    return (val > 0)? 1: 2; // clock or counterclock wise 
+} 
+  
+// The main function that returns true if line segment 'p1q1' 
+// and 'p2q2' intersect. 
+bool doIntersect(Point p1, Point q1, Point p2, Point q2) 
+{ 
+    // Find the four orientations needed for general and 
+    // special cases 
+    int o1 = orientation(p1, q1, p2); 
+    int o2 = orientation(p1, q1, q2); 
+    int o3 = orientation(p2, q2, p1); 
+    int o4 = orientation(p2, q2, q1); 
+  
+    // General case 
+    if (o1 != o2 && o3 != o4) 
+        return true; 
+  
+    // Special Cases 
+    // p1, q1 and p2 are colinear and p2 lies on segment p1q1 
+    if (o1 == 0 && onSegment(p1, p2, q1)) return true; 
+  
+    // p1, q1 and q2 are colinear and q2 lies on segment p1q1 
+    if (o2 == 0 && onSegment(p1, q2, q1)) return true; 
+  
+    // p2, q2 and p1 are colinear and p1 lies on segment p2q2 
+    if (o3 == 0 && onSegment(p2, p1, q2)) return true; 
+  
+     // p2, q2 and q1 are colinear and q1 lies on segment p2q2 
+    if (o4 == 0 && onSegment(p2, q1, q2)) return true; 
+  
+    return false; // Doesn't fall in any of the above cases 
+} 
+  
+// Driver program to test above functions 
+int main() 
+{ 
+    struct Point p1 = {1, 1}, q1 = {10, 1}; 
+    struct Point p2 = {1, 2}, q2 = {10, 2}; 
+  
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    p1 = {10, 0}, q1 = {0, 10}; 
+    p2 = {0, 0}, q2 = {10, 10}; 
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    p1 = {-5, -5}, q1 = {0, 0}; 
+    p2 = {1, 1}, q2 = {10, 10}; 
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    return 0; 
+}
+// A C++ program to check if two given line segments intersect 
+#include <iostream> 
+using namespace std; 
+  
+struct Point 
+{ 
+    int x; 
+    int y; 
+}; 
+  
+// Given three colinear points p, q, r, the function checks if 
+// point q lies on line segment 'pr' 
+bool onSegment(Point p, Point q, Point r) 
+{ 
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && 
+        q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)) 
+       return true; 
+  
+    return false; 
+} 
+  
+// To find orientation of ordered triplet (p, q, r). 
+// The function returns following values 
+// 0 --> p, q and r are colinear 
+// 1 --> Clockwise 
+// 2 --> Counterclockwise 
+int orientation(Point p, Point q, Point r) 
+{ 
+    // See https://www.geeksforgeeks.org/orientation-3-ordered-points/ 
+    // for details of below formula. 
+    int val = (q.y - p.y) * (r.x - q.x) - 
+              (q.x - p.x) * (r.y - q.y); 
+  
+    if (val == 0) return 0;  // colinear 
+  
+    return (val > 0)? 1: 2; // clock or counterclock wise 
+} 
+  
+// The main function that returns true if line segment 'p1q1' 
+// and 'p2q2' intersect. 
+bool doIntersect(Point p1, Point q1, Point p2, Point q2) 
+{ 
+    // Find the four orientations needed for general and 
+    // special cases 
+    int o1 = orientation(p1, q1, p2); 
+    int o2 = orientation(p1, q1, q2); 
+    int o3 = orientation(p2, q2, p1); 
+    int o4 = orientation(p2, q2, q1); 
+  
+    // General case 
+    if (o1 != o2 && o3 != o4) 
+        return true; 
+  
+    // Special Cases 
+    // p1, q1 and p2 are colinear and p2 lies on segment p1q1 
+    if (o1 == 0 && onSegment(p1, p2, q1)) return true; 
+  
+    // p1, q1 and q2 are colinear and q2 lies on segment p1q1 
+    if (o2 == 0 && onSegment(p1, q2, q1)) return true; 
+  
+    // p2, q2 and p1 are colinear and p1 lies on segment p2q2 
+    if (o3 == 0 && onSegment(p2, p1, q2)) return true; 
+  
+     // p2, q2 and q1 are colinear and q1 lies on segment p2q2 
+    if (o4 == 0 && onSegment(p2, q1, q2)) return true; 
+  
+    return false; // Doesn't fall in any of the above cases 
+} 
+  
+// Driver program to test above functions 
+int main() 
+{ 
+    struct Point p1 = {1, 1}, q1 = {10, 1}; 
+    struct Point p2 = {1, 2}, q2 = {10, 2}; 
+  
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    p1 = {10, 0}, q1 = {0, 10}; 
+    p2 = {0, 0}, q2 = {10, 10}; 
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    p1 = {-5, -5}, q1 = {0, 0}; 
+    p2 = {1, 1}, q2 = {10, 10}; 
+    doIntersect(p1, q1, p2, q2)? cout << "Yes\n": cout << "No\n"; 
+  
+    return 0; 
+}
+
+
+/* Verifica se  um  ponnto tá  dentro   ou   fora  do  polygnno */
+
+#include <iostream> 
+using namespace std; 
+  
+// Define Infinite (Using INT_MAX caused overflow problems) 
+#define INF 10000 
+  
+struct Point 
+{ 
+    int x; 
+    int y; 
+}; 
+  
+// Given three colinear points p, q, r, the function checks if 
+// point q lies on line segment 'pr' 
+bool onSegment(Point p, Point q, Point r) 
+{ 
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && 
+            q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)) 
+        return true; 
+    return false; 
+} 
+  
+// To find orientation of ordered triplet (p, q, r). 
+// The function returns following values 
+// 0 --> p, q and r are colinear 
+// 1 --> Clockwise 
+// 2 --> Counterclockwise 
+int orientation(Point p, Point q, Point r) 
+{ 
+    int val = (q.y - p.y) * (r.x - q.x) - 
+              (q.x - p.x) * (r.y - q.y); 
+  
+    if (val == 0) return 0;  // colinear 
+    return (val > 0)? 1: 2; // clock or counterclock wise 
+} 
+  
+// The function that returns true if line segment 'p1q1' 
+// and 'p2q2' intersect. 
+bool doIntersect(Point p1, Point q1, Point p2, Point q2) 
+{ 
+    // Find the four orientations needed for general and 
+    // special cases 
+    int o1 = orientation(p1, q1, p2); 
+    int o2 = orientation(p1, q1, q2); 
+    int o3 = orientation(p2, q2, p1); 
+    int o4 = orientation(p2, q2, q1); 
+  
+    // General case 
+    if (o1 != o2 && o3 != o4) 
+        return true; 
+  
+    // Special Cases 
+    // p1, q1 and p2 are colinear and p2 lies on segment p1q1 
+    if (o1 == 0 && onSegment(p1, p2, q1)) return true; 
+  
+    // p1, q1 and p2 are colinear and q2 lies on segment p1q1 
+    if (o2 == 0 && onSegment(p1, q2, q1)) return true; 
+  
+    // p2, q2 and p1 are colinear and p1 lies on segment p2q2 
+    if (o3 == 0 && onSegment(p2, p1, q2)) return true; 
+  
+     // p2, q2 and q1 are colinear and q1 lies on segment p2q2 
+    if (o4 == 0 && onSegment(p2, q1, q2)) return true; 
+  
+    return false; // Doesn't fall in any of the above cases 
+} 
+  
+// Returns true if the point p lies inside the polygon[] with n vertices 
+bool isInside(Point polygon[], int n, Point p) 
+{ 
+    // There must be at least 3 vertices in polygon[] 
+    if (n < 3)  return false; 
+  
+    // Create a point for line segment from p to infinite 
+    Point extreme = {INF, p.y}; 
+  
+    // Count intersections of the above line with sides of polygon 
+    int count = 0, i = 0; 
+    do
+    { 
+        int next = (i+1)%n; 
+  
+        // Check if the line segment from 'p' to 'extreme' intersects 
+        // with the line segment from 'polygon[i]' to 'polygon[next]' 
+        if (doIntersect(polygon[i], polygon[next], p, extreme)) 
+        { 
+            // If the point 'p' is colinear with line segment 'i-next', 
+            // then check if it lies on segment. If it lies, return true, 
+            // otherwise false 
+            if (orientation(polygon[i], p, polygon[next]) == 0) 
+               return onSegment(polygon[i], p, polygon[next]); 
+  
+            count++; 
+        } 
+        i = next; 
+    } while (i != 0); 
+  
+    // Return true if count is odd, false otherwise 
+    return count&1;  // Same as (count%2 == 1) 
+} 
+  
+// Driver program to test above functions 
+int main() 
+{ 
+    Point polygon1[] = {{0, 0}, {10, 0}, {10, 10}, {0, 10}}; 
+    int n = sizeof(polygon1)/sizeof(polygon1[0]); 
+    Point p = {20, 20}; 
+    isInside(polygon1, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    p = {5, 5}; 
+    isInside(polygon1, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    Point polygon2[] = {{0, 0}, {5, 5}, {5, 0}}; 
+    p = {3, 3}; 
+    n = sizeof(polygon2)/sizeof(polygon2[0]); 
+    isInside(polygon2, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    p = {5, 1}; 
+    isInside(polygon2, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    p = {8, 1}; 
+    isInside(polygon2, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    Point polygon3[] =  {{0, 0}, {10, 0}, {10, 10}, {0, 10}}; 
+    p = {-1,10}; 
+    n = sizeof(polygon3)/sizeof(polygon3[0]); 
+    isInside(polygon3, n, p)? cout << "Yes \n": cout << "No \n"; 
+  
+    return 0; 
+}
+
+
+/* Dados n segmentos de linha, encontre se dois segmentos se cruzam  */
+
+
+sweepLineIntersection (Points [0..2n-1]): 
+1. Ordenar os pontos [] da esquerda para a direita (de acordo com a coordenada x)
+
+2. Crie um BST T. de auto-balanceamento vazio. Ele conterá toda a linha ativa
+   Segmentos ordenados por coordenada y.
+
+// Processar todos os 2n pontos  
+3.  para i = 0 a 2n-1
+
+   // Se este ponto for deixado no final de sua linha  
+    if (Points [i] .isLeft)
+       T.insert (Pontos [i] .line ()) // Insere na árvore
+
+       // Verifique se este ponto cruza com seu predecessor e sucessor 
+       if (doIntersect (Pontos [i] .line (), T.pred (Pontos [i] .line ()))
+          retorna true 
+       if (doIntersect (Points [i]). line (), T.succ (Pontos [i] .line ()))
+          return true
+
+    else  // Se for um final direito de sua linha 
+       // Verifique se o seu antecessor e sucessor se cruzam entre si 
+       se (doIntersect (T.pred (Pontos [i] .line (), T.succ (Pontos [i] .line ()))
+          return  true 
+       T.delete (Pontos [i] .line ())   // Excluir da árvore
+ 
+4. return False
+
+
+/* Verifique se um determinado ponto está dentro de um triângulo ou não */
+
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+/* A utility function to calculate area of triangle formed by (x1, y1),  
+   (x2, y2) and (x3, y3) */ 
+float area(int x1, int y1, int x2, int y2, int x3, int y3) 
+{ 
+   return abs((x1*(y2-y3) + x2*(y3-y1)+ x3*(y1-y2))/2.0); 
+} 
+  
+/* A function to check whether point P(x, y) lies inside the triangle formed  
+   by A(x1, y1), B(x2, y2) and C(x3, y3) */ 
+bool isInside(int x1, int y1, int x2, int y2, int x3, int y3, int x, int y) 
+{    
+   /* Calculate area of triangle ABC */
+   float A = area (x1, y1, x2, y2, x3, y3); 
+  
+   /* Calculate area of triangle PBC */   
+   float A1 = area (x, y, x2, y2, x3, y3); 
+  
+   /* Calculate area of triangle PAC */   
+   float A2 = area (x1, y1, x, y, x3, y3); 
+  
+   /* Calculate area of triangle PAB */    
+   float A3 = area (x1, y1, x2, y2, x, y); 
+    
+   /* Check if sum of A1, A2 and A3 is same as A */ 
+   return (A == A1 + A2 + A3); 
+} 
+  
+/* Driver program to test above function */
+int main() 
+{ 
+   /* Let us check whether the point P(10, 15) lies inside the triangle  
+      formed by A(0, 0), B(20, 0) and C(10, 30) */
+   if (isInside(0, 0, 20, 0, 10, 30, 10, 15)) 
+     printf ("Inside"); 
+   else
+     printf ("Not Inside"); 
+  
+   return 0; 
+}
+
+
+/* Como verificar se dados quatro pontos formam um quadrado */
+
+// A C++ program to check if four given points form a square or not. 
+#include <iostream> 
+using namespace std; 
+  
+// Structure of a point in 2D space 
+struct Point { 
+    int x, y; 
+}; 
+  
+// A utility function to find square of distance 
+// from point 'p' to poitn 'q' 
+int distSq(Point p, Point q) 
+{ 
+    return (p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y); 
+} 
+  
+// This function returns true if (p1, p2, p3, p4) form a 
+// square, otherwise false 
+bool isSquare(Point p1, Point p2, Point p3, Point p4) 
+{ 
+    int d2 = distSq(p1, p2); // from p1 to p2 
+    int d3 = distSq(p1, p3); // from p1 to p3 
+    int d4 = distSq(p1, p4); // from p1 to p4 
+  
+    // If lengths if (p1, p2) and (p1, p3) are same, then 
+    // following conditions must met to form a square. 
+    // 1) Square of length of (p1, p4) is same as twice 
+    // the square of (p1, p2) 
+    // 2) Square of length of (p2, p3) is same as twice the square of (p1, p2) 
+  
+    if (d2 == d3 && 2 * d2 == d4 && 2 * d2 == distSq(p2, p3)) { 
+        int d = distSq(p2, p4); 
+        return (d == distSq(p3, p4) && d == d2); 
+    } 
+  
+    // The below two cases are similar to above case 
+    if (d3 == d4 && 2 * d3 == d2 && 2 * d3 == distSq(p3, p4)) { 
+        int d = distSq(p2, p3); 
+        return (d == distSq(p2, p4) && d == d3); 
+    } 
+    if (d2 == d4 && 2 * d2 == d3 && 2 * d2 == distSq(p2, p4)) { 
+        int d = distSq(p2, p3); 
+        return (d == distSq(p3, p4) && d == d2); 
+    } 
+  
+    return false; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    Point p1 = { 20, 10 }, p2 = { 10, 20 }, 
+          p3 = { 20, 20 }, p4 = { 10, 10 }; 
+    isSquare(p1, p2, p3, p4) ? cout << "Yes" : cout << "No"; 
+    return 0; 
+}
+
+
+/* Triangulo  de pascal  */
+
+
+//  C++ code for Pascal's Triangle 
+#include <stdio.h> 
+  
+// See https://www.geeksforgeeks.org/archives/25621  
+// for details of this function 
+int binomialCoeff(int n, int k); 
+  
+// Function to print first 
+// n lines of Pascal's  
+// Triangle 
+void printPascal(int n) 
+{ 
+    // Iterate through every line and 
+    // print entries in it 
+    for (int line = 0; line < n; line++) 
+    { 
+        // Every line has number of  
+        // integers equal to line  
+        // number 
+        for (int i = 0; i <= line; i++) 
+            printf("%d ", 
+                    binomialCoeff(line, i)); 
+        printf("\n"); 
+    } 
+} 
+  
+// See https://www.geeksforgeeks.org/archives/25621 
+// for details of this function 
+int binomialCoeff(int n, int k) 
+{ 
+    int res = 1; 
+    if (k > n - k) 
+    k = n - k; 
+    for (int i = 0; i < k; ++i) 
+    { 
+        res *= (n - i); 
+        res /= (i + 1); 
+    } 
+      
+    return res; 
+} 
+  
+// Driver program  
+int main() 
+{ 
+    int n = 7; 
+    printPascal(n); 
+    return 0; 
+} 
+
+
+/*  Torre  de  hannnoi */
+
+
+#include <stdio.h> 
+  
+// C recursive function to solve tower of hanoi puzzle 
+void towerOfHanoi(int n, char from_rod, char to_rod, char aux_rod) 
+{ 
+    if (n == 1) 
+    { 
+        printf("\n Move disk 1 from rod %c to rod %c", from_rod, to_rod); 
+        return; 
+    } 
+    towerOfHanoi(n-1, from_rod, aux_rod, to_rod); 
+    printf("\n Move disk %d from rod %c to rod %c", n, from_rod, to_rod); 
+    towerOfHanoi(n-1, aux_rod, to_rod, from_rod); 
+} 
+  
+int main() 
+{ 
+    int n = 4; // Number of disks 
+    towerOfHanoi(n, 'A', 'C', 'B');  // A, B and C are names of rods 
+    return 0; 
+}
+
+
+
+/* mutiplica dois  polinnomios */
+
+
+// Simple C++ program to multiply two polynomials 
+#include <iostream> 
+using namespace std; 
+  
+// A[] represents coefficients of first polynomial 
+// B[] represents coefficients of second polynomial 
+// m and n are sizes of A[] and B[] respectively 
+int *multiply(int A[], int B[], int m, int n) 
+{ 
+   int *prod = new int[m+n-1]; 
+  
+   // Initialize the porduct polynomial 
+   for (int i = 0; i<m+n-1; i++) 
+     prod[i] = 0; 
+  
+   // Multiply two polynomials term by term 
+  
+   // Take ever term of first polynomial 
+   for (int i=0; i<m; i++) 
+   { 
+     // Multiply the current term of first polynomial 
+     // with every term of second polynomial. 
+     for (int j=0; j<n; j++) 
+         prod[i+j] += A[i]*B[j]; 
+   } 
+  
+   return prod; 
+} 
+  
+// A utility function to print a polynomial 
+void printPoly(int poly[], int n) 
+{ 
+    for (int i=0; i<n; i++) 
+    { 
+       cout << poly[i]; 
+       if (i != 0) 
+        cout << "x^" << i ; 
+       if (i != n-1) 
+       cout << " + "; 
+    } 
+} 
+  
+// Driver program to test above functions 
+int main() 
+{ 
+    // The following array represents polynomial 5 + 10x^2 + 6x^3 
+    int A[] = {5, 0, 10, 6}; 
+  
+    // The following array represents polynomial 1 + 2x + 4x^2 
+    int B[] = {1, 2, 4}; 
+    int m = sizeof(A)/sizeof(A[0]); 
+    int n = sizeof(B)/sizeof(B[0]); 
+  
+    cout << "First polynomial is n"; 
+    printPoly(A, m); 
+    cout << "nSecond polynomial is n"; 
+    printPoly(B, n); 
+  
+    int *prod = multiply(A, B, m, n); 
+  
+    cout << "nProduct polynomial is n"; 
+    printPoly(prod, m+n-1); 
+  
+    return 0; 
+}
+
+
+/*Calcula  phi n  pelo  mdc */
+
+
+
+// A simple C program to calculate Euler's Totient Function 
+#include <stdio.h> 
+  
+// Function to return gcd of a and b 
+int gcd(int a, int b) 
+{ 
+    if (a == 0) 
+        return b; 
+    return gcd(b % a, a); 
+} 
+  
+// A simple method to evaluate Euler Totient Function 
+int phi(unsigned int n) 
+{ 
+    unsigned int result = 1; 
+    for (int i = 2; i < n; i++) 
+        if (gcd(i, n) == 1) 
+            result++; 
+    return result; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    int n; 
+    for (n = 1; n <= 10; n++) 
+        printf("phi(%d) = %d\n", n, phi(n)); 
+    return 0; 
+}
+
+
+
+/*Calcula  phi n verificando  os primos  */
+
+
+// C program to calculate Euler's Totient Function 
+// using Euler's product formula 
+#include <stdio.h> 
+  
+int phi(int n) 
+{ 
+    float result = n; // Initialize result as n 
+  
+    // Consider all prime factors of n and for every prime 
+    // factor p, multiply result with (1 - 1/p) 
+    for (int p = 2; p * p <= n; ++p) { 
+          
+        // Check if p is a prime factor. 
+        if (n % p == 0) { 
+              
+            // If yes, then update n and result 
+            while (n % p == 0) 
+                n /= p; 
+            result *= (1.0 - (1.0 / (float)p)); 
+        } 
+    } 
+  
+    // If n has a prime factor greater than sqrt(n) 
+    // (There can be at-most one such prime factor) 
+    if (n > 1) 
+        result *= (1.0 - (1.0 / (float)n)); 
+  
+    return (int)result; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    int n; 
+    for (n = 1; n <= 10; n++) 
+        printf("phi(%d) = %d\n", n, phi(n)); 
+    return 0; 
+}
